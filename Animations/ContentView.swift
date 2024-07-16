@@ -1,32 +1,22 @@
 import SwiftUI
 
 struct ContentView: View {
-    let letters = Array("Irma")
-    
-    @State private var enabled = false
-    @State private var dragAmount = CGSize.zero
+    @State private var isShowing = true
     
     var body: some View {
-        HStack(spacing: 0) {
-            ForEach(0..<letters.count, id: \.self) { num in
-                Text(String(letters[num]))
-                    .padding(5)
-                    .font(.title)
-                    .background(enabled ? .blue : .pink)
-                    .foregroundColor(.white)
-                    .offset(dragAmount)
-                    .animation(.linear.delay(Double(num) / 20), value: dragAmount)
-                    
+        Button("Tap me") {
+            withAnimation {
+                isShowing.toggle()
             }
         }
-        .gesture(
-            DragGesture()
-                .onChanged { dragAmount = $0.translation }
-                .onEnded { _ in
-                    dragAmount = .zero
-                    enabled.toggle()
-                }
-        )
+        
+        if isShowing {
+            Rectangle()
+                .fill(.green)
+                .frame(width: 200, height: 200)
+                .transition(.asymmetric(insertion: .scale, removal: .opacity))
+        }
+       
     }
 }
 #Preview {
